@@ -34,6 +34,7 @@
             max-width: 85%;
             z-index: 10;
             border: 8px solid #ff4d6d;
+            position: relative;
         }
 
         h1 {
@@ -55,30 +56,31 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            min-height: 120px; /* Space for the growing Yes button */
+            min-height: 150px;
         }
 
         button {
-            padding: 15px 25px;
-            font-size: 1.1rem;
+            padding: 15px 30px;
+            font-size: 1.2rem;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             font-weight: bold;
-            transition: transform 0.1s ease;
+            transition: transform 0.2s ease;
         }
 
         #yesBtn {
             background-color: #2ecc71;
             color: white;
             z-index: 1000;
+            box-shadow: 0 0 20px rgba(46, 204, 113, 0.6);
         }
 
         #noBtn {
             background-color: #e74c3c;
             color: white;
-            position: absolute; /* Crucial for moving */
-            transition: 0.1s ease;
+            position: relative; /* Starts next to Yes button */
+            z-index: 999;
         }
 
         .success-message { display: none; }
@@ -107,8 +109,8 @@
     <img src="https://img.icons8.com/color/96/mountain.png" class="floating-doodle" style="top: 10%; right: 5%; width: 80px;">
     <img src="https://img.icons8.com/color/96/pirate-ship.png" class="floating-doodle" style="bottom: 5%; left: 5%; width: 60px;">
     
-    <div style="top: 75%; right: 10%; color: #ff4d6d; opacity: 0.5;" class="floating-doodle">BADMASI 🔥</div>
-    <div style="top: 30%; left: 2%; color: #ff4d6d; opacity: 0.5;" class="floating-doodle">MAALKIN KA GULAAM 🙇‍♂️</div>
+    <div style="top: 80%; right: 10%; color: #ff4d6d; opacity: 0.5; font-weight: bold;" class="floating-doodle">BADMASI 🔥</div>
+    <div style="top: 35%; left: 2%; color: #ff4d6d; opacity: 0.5; font-weight: bold;" class="floating-doodle">MAALKIN KA GULAAM 🙇‍♂️</div>
 
     <div class="container" id="mainContainer">
         <img src="https://media.tenor.com/7D9t_vbi96MAAAAi/tkthao219-bubududu.gif" class="main-gif">
@@ -121,7 +123,7 @@
     </div>
 
     <div class="container success-message" id="successScreen">
-        <img src="https://media.tenor.com/0073S6f88_IAAAAi/bubu-dudu-kiss.gif" alt="kiss">
+        <img src="https://media.tenor.com/0073S6f88_IAAAAi/bubu-dudu-kiss.gif">
         <h2>YEH HUYI NAA BAAT MERI BADMASSSSS MWAAAAAAAAHHH PUCCHII BAARISH</h2>
         <h3 style="color: #ff4d6d;">YAYAYYA THANKYOU MAALKING ❤️</h3>
     </div>
@@ -134,9 +136,10 @@
         
         let yesScale = 1;
 
-        // The "Impossible No" Logic
         function moveNoButton() {
-            // Calculate random position within screen bounds
+            // Switch to absolute positioning only AFTER the first interaction
+            noBtn.style.position = 'absolute';
+            
             const maxX = window.innerWidth - noBtn.offsetWidth;
             const maxY = window.innerHeight - noBtn.offsetHeight;
             
@@ -146,34 +149,32 @@
             noBtn.style.left = `${newX}px`;
             noBtn.style.top = `${newY}px`;
 
-            // Make Yes button grow
-            yesScale += 0.3;
+            yesScale += 0.35;
             yesBtn.style.transform = `scale(${yesScale})`;
         }
 
-        // Trigger on hover (Desktop)
-        noBtn.addEventListener('mouseover', moveNoButton);
+        // PC Hover
+        noBtn.addEventListener('mouseenter', moveNoButton);
         
-        // Trigger on tap (Mobile) - this is what makes it run away on phones
+        // Mobile Tap
         noBtn.addEventListener('touchstart', (e) => {
-            e.preventDefault(); // Stop the click from happening
+            e.preventDefault();
             moveNoButton();
         });
 
-        // Click blocker - just in case!
+        // Click blocker
         noBtn.addEventListener('click', (e) => {
             e.preventDefault();
             moveNoButton();
         });
 
-        // Yes Button Win Logic
         yesBtn.addEventListener('click', () => {
             mainContainer.style.display = 'none';
             successScreen.style.display = 'block';
             setInterval(createKiss, 100);
             confetti({
-                particleCount: 400,
-                spread: 150,
+                particleCount: 500,
+                spread: 160,
                 origin: { y: 0.6 }
             });
         });
